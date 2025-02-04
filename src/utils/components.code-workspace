@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "../components"
+		},
+		{
+			"path": "../images"
+		},
+		{
+			"path": "../pages"
+		},
+		{
+			"path": "../public"
+		},
+		{
+			"path": "../scss"
+		},
+		{
+			"path": "../types"
+		},
+		{
+			"path": "."
+		},
+		{
+			"path": "../vendor"
+		}
+	]
+}
