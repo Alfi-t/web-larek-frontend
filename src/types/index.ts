@@ -1,54 +1,44 @@
-// Типы для обработки событий
-export type EventName = string | RegExp;
-export type Subscriber = (data?: any) => void;
-
-// Общие методы события
-export interface IEventManager {
-  on(event: EventName, listener: Subscriber): void;
-  off(event: EventName, listener: Subscriber): void;
-  emit(event: EventName, data?: any): void;
-}
-
-// Данные, возвращаемые сервером
-export type ApiResponse<T> = {
-  total: number;
-  items: T[];
-};
-
-// Основные интерфейсы данных
-export interface IProduct {
-  id: string;
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-}
-
-export interface ICartItem {
-  productId: string;
-  quantity: number;
-}
-
-export interface IOrder {
-  id: string;
-  items: ICartItem[];
-  total: number;
-  paymentMethod: string;
-  deliveryAddress: string;
-}
-
-export interface IApiMethods {
-  getProducts(): Promise<IProduct[]>;
-  getProduct(id: string): Promise<IProduct>;
-  createOrder(order: Omit<IOrder, 'id'>): Promise<IOrder>;
-}
-
-// Состояние приложения
-export interface IAppState {
-  products: IProduct[];
-  cart: ICartItem[];
-  order: IOrder | null;
-}
+export interface IProductItem {
+    id: string;
+    description: string;
+    image: string;
+    title: string;
+    category: string;
+    price: number | null;
+  }
+  
+  export interface IActions {
+    onClick: (event: MouseEvent) => void;
+  }
+  
+  // интерфейс формы заказа
+  export interface IOrderForm {
+  payment?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  total?: string | number;
+  }
+  
+  export interface IOrder extends IOrderForm {
+    items: string[];
+  }
+  
+  export interface IOrderLot{
+    payment: string;
+    email: string;
+    phone: string;
+    address: string;
+    total: number;
+    items: string[];
+  }
+  
+  export interface IOrderResult {
+    id: string;
+    total: number;
+  }
+  
+  // тип ошибки формы
+  export type FormErrors = Partial<Record<keyof IOrder, string>>;
 
   
