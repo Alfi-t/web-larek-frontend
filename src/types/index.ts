@@ -17,20 +17,11 @@ export interface IProductItem {
   address?: string;
   phone?: string;
   email?: string;
-  total?: string | number;
   }
   
   export interface IOrder extends IOrderForm {
     items: string[];
-  }
-  
-  export interface IOrderLot{
-    payment: string;
-    email: string;
-    phone: string;
-    address: string;
-    total: number;
-    items: string[];
+    total: number | null; 
   }
   
   export interface IOrderResult {
@@ -39,6 +30,6 @@ export interface IProductItem {
   }
   
   // тип ошибки формы
-  export type FormErrors = Partial<Record<keyof IOrder, string>>;
+  export type FormErrors = Partial<Record<keyof IOrderForm, string>>;
 
   
