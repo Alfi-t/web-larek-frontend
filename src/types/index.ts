@@ -21,7 +21,7 @@ export interface IProductItem {
   
   export interface IOrder extends IOrderForm {
     items: string[];
-    total: number | null; 
+    total: number; 
   }
   
   export interface IOrderResult {
@@ -32,4 +32,11 @@ export interface IProductItem {
   // тип ошибки формы
   export type FormErrors = Partial<Record<keyof IOrderForm, string>>;
 
-  
+  export type PaymentMethod = 'cash' | 'card';
+
+  export interface IOrderForm { 
+  payment?: PaymentMethod; 
+  address?: string; 
+  phone?: string; 
+  email?: string; 
+}
