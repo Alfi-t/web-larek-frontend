@@ -107,12 +107,10 @@ export function isBoolean(v: unknown): v is boolean {
  * здесь не учтено много факторов
  * в интернет можно найти более полные реализации
  */
-export function createElement<
-    T extends HTMLElement
-    >(
+export function createElement<T extends HTMLElement>(
     tagName: keyof HTMLElementTagNameMap,
     props?: Partial<Record<keyof T, string | boolean | object>>,
-    children?: HTMLElement | HTMLElement []
+    children?: HTMLElement | HTMLElement[]
 ): T {
     const element = document.createElement(tagName) as T;
     if (props) {
@@ -121,7 +119,7 @@ export function createElement<
             if (isPlainObject(value) && key === 'dataset') {
                 setElementData(element, value);
             } else {
-                // @ts-expect-error fix indexing later
+                // @ts-ignore - consider refining the type
                 element[key] = isBoolean(value) ? value : String(value);
             }
         }
