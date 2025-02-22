@@ -25,7 +25,7 @@ const orderTemplate = document.querySelector('#order') as HTMLTemplateElement;
 const contactsTemplate = document.querySelector('#contacts') as HTMLTemplateElement;
 const successTemplate = document.querySelector('#success') as HTMLTemplateElement;
 
-const larekApiInstance = new LarekApi(CDN_URL, API_URL); 
+const larekApiInstance = new LarekApi(CDN_URL, API_URL, {});
 const events = new EventEmitter();
 const dataModel = new DataModel(events);
 const modal = new Modal(ensureElement<HTMLElement>('#modal-container'), events);
@@ -53,11 +53,17 @@ events.on('modalCard:open', (item: IProductItem) => {
   modal.render();
 });
 
-/********** Добавление карточки товара в корзину **********/
-events.on('card:addBasket', () => {
-  basketModel.setSelectedCard(dataModel.selectedCard); // добавить карточку товара в корзину
-  basket.renderHeaderBasketCounter(basketModel.getCounter()); // отобразить количество товара на иконке корзины
-  modal.close();
+/********** Добавление товара в корзину **********/
+events.on("card:addBasket", () => {
+  const selectedCard = dataModel.selectedCard;
+
+  if (!selectedCard) {
+    console.error("Попытка добавить некорректный товар. selectedCard отсутствует.");
+    return;
+  }
+
+  basketModel.setSelectedCard(selectedCard); // добавить карточку товара в корзину
+  console.log("Товар добавлен в корзину:", selectedCard);
 });
 
 /********** Открытие модального окна корзины **********/

@@ -6,7 +6,7 @@ export interface IBasketModel {
   getSumAllProducts: () => number;
   setSelectedCard(data: IProductItem): void;
   deleteCardToBasket(item: IProductItem): void;
-  clearBasketProducts(): void
+  clearBasketProducts(): void;
 }
 
 export class BasketModel implements IBasketModel {
@@ -31,15 +31,15 @@ export class BasketModel implements IBasketModel {
 
   // сумма всех товаров в корзине
   getSumAllProducts() {
-    let sumAll = 0;
-    this.basketProducts.forEach(item => {
-      sumAll = sumAll + item.price;
-    });
-    return sumAll;
+    return this.basketProducts.reduce((sum, item) => sum + (item.price || 0), 0);
   }
 
   // добавить карточку товара в корзину
   setSelectedCard(data: IProductItem) {
+    if (!data) {
+      console.error("Попытка добавить некорректный товар в корзину:", data);
+      return;
+    }
     this._basketProducts.push(data);
   }
 
@@ -52,6 +52,6 @@ export class BasketModel implements IBasketModel {
   }
 
   clearBasketProducts() {
-    this.basketProducts = []
+    this.basketProducts = [];
   }
 }
