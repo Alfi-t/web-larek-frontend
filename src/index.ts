@@ -37,13 +37,19 @@ const contacts = new Contacts(contactsTemplate, events);
 /********** Отображения карточек товара на странице **********/
 events.on('productCard:receive', () => {
   dataModel.productCard.forEach(item => {
-    const card = new Card(cardCatalogTemplate, events);
+    const card = new Card(cardCatalogTemplate, events,
+      {
+        onClick: () => events.emit("card:select", item)
+      }
+    );
     ensureElement<HTMLElement>('.gallery').append(card.render(item));
   });
 });
 
 /********** Получить объект данных "IProductItem" карточки по которой кликнули **********/
-events.on('card:select', (item: IProductItem) => { dataModel.setPreview(item) });
+events.on('card:select', (item: IProductItem) => {
+  dataModel.setPreview(item)
+});
 
 /********** Открываем модальное окно карточки товара **********/
 events.on('modalCard:open', (item: IProductItem) => {

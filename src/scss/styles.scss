@@ -3,18 +3,18 @@
 @use "../vendor/garamond";
 @use "../vendor/glyphter";
 
-@use "../common.blocks/button";
-@use "../common.blocks/form";
-@use "../common.blocks/modal";
+@use "..//common.blocks/button.scss";
+@use "../common.blocks/form.scss";
+@use "../common.blocks/modal.scss";
 
-@use "../common.blocks/page";
+@use "../common.blocks/page.scss";
 @use "../common.blocks/header";
 
-@use "../common.blocks/gallery";
-@use "../common.blocks/card";
-@use "../common.blocks/basket";
-@use "../common.blocks/order";
-@use "../common.blocks/order-success";
+@use "../common.blocks/gallery.scss";
+@use "../common.blocks/card.scss";
+@use "../common.blocks/basket.scss";
+@use "../common.blocks/order.scss";
+@use "../common.blocks/order-success.scss";
 
 
 @use "variables" as *;
