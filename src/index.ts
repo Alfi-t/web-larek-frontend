@@ -1,5 +1,4 @@
 import './scss/styles.scss';
-import dotenv from 'dotenv';
 import { CDN_URL, API_URL } from './utils/constants';
 import { EventEmitter } from './components/base/events';
 import { LarekApi } from './components/Model/LarekApi';
@@ -68,15 +67,33 @@ events.on("card:addBasket", () => {
 
 /********** Открытие модального окна корзины **********/
 events.on('basket:open', () => {
-  basket.renderSumAllProducts(basketModel.getSumAllProducts());  // отобразить сумма всех продуктов в корзине
-  let i = 0;
-  basket.items = basketModel.basketProducts.map((item) => {
-    const basketItem = new BasketItem(cardBasketTemplate, events, { onClick: () => events.emit('basket:basketItemRemove', item) });
+  const basketItems = basketModel.basketProducts.map((item, index) => {
+    const basketItem = new BasketItem(cardBasketTemplate, events, { 
+      onClick: () => events.emit('basket:basketItemRemove', item) 
+    });
+    return basketItem.render(item, index + 1);
+  });
 
-    i = i + 1;
-    return basketItem.render(item, i);
-  })
-  modal.content = basket.render();
+  const totalSum = basketModel.getSumAllProducts();
+  modal.content = basket.render(basketItems, totalSum); // Передача элементов и общей суммы
+  modal.render();
+});
+
+/********** Удаление карточки товара из корзины **********/
+events.on('basket:basketItemRemove', (item: IProductItem) => {
+  basketModel.deleteCardToBasket(item);
+
+  // Обновляем содержимое корзины
+  const basketItems = basketModel.basketProducts.map((item, index) => {
+    const basketItem = new BasketItem(cardBasketTemplate, events, { 
+      onClick: () => events.emit('basket:basketItemRemove', item) 
+    });
+    return basketItem.render(item, index + 1);
+  });
+
+  const totalSum = basketModel.getSumAllProducts();
+  modal.content = basket.render(basketItems, totalSum); // Передача обновленных данных
+  basket.renderHeaderBasketCounter(basketModel.getCounter()); // Обновить количество товаров
   modal.render();
 });
 
@@ -104,7 +121,7 @@ events.on('order:paymentSelection', (button: HTMLButtonElement) => { formModel.p
 
 /********** Отслеживаем изменение в поле в вода "адреса доставки" **********/
 events.on(`order:changeAddress`, (data: { field: string, value: string }) => {
-  formModel.setOrderAddress(data.field, data.value);
+  formModel.setOrderAddress(data.value); // Передаем `value` как адрес
 });
 
 /********** Валидация данных строки "address" и payment **********/
