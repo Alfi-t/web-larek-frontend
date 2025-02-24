@@ -59,16 +59,10 @@ events.on('modalCard:open', (item: IProductItem) => {
 });
 
 /********** Добавление товара в корзину **********/
-events.on("card:addBasket", () => {
-  const selectedCard = dataModel.selectedCard;
-
-  if (!selectedCard) {
-    console.error("Попытка добавить некорректный товар. selectedCard отсутствует.");
-    return;
-  }
-
-  basketModel.setSelectedCard(selectedCard); // добавить карточку товара в корзину
-  console.log("Товар добавлен в корзину:", selectedCard);
+events.on('card:addBasket', () => {
+  basketModel.setSelectedCard(dataModel.selectedCard); // добавить карточку товара в корзину
+  basket.renderHeaderBasketCounter(basketModel.getCounter()); // отобразить количество товара на иконке корзины
+  modal.close();
 });
 
 /********** Открытие модального окна корзины **********/
