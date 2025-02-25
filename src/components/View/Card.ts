@@ -1,5 +1,6 @@
 import { IActions, IProductItem } from "../../types";
 import { IEvents } from "../base/events";
+import { categoryClasses } from '..//../utils/constants';
 
 export interface ICard {
   render(data: IProductItem): HTMLElement;
@@ -11,13 +12,6 @@ export class Card implements ICard {
   protected _cardTitle: HTMLElement;
   protected _cardImage: HTMLImageElement;
   protected _cardPrice: HTMLElement;
-  protected _colors = <Record<string, string>>{
-    "дополнительное": "additional",
-    "софт-скил": "soft",
-    "кнопка": "button",
-    "хард-скил": "hard",
-    "другое": "other",
-  }
   
   constructor(template: HTMLTemplateElement, protected events: IEvents, actions?: IActions) {
     this._cardElement = template.content.querySelector('.card').cloneNode(true) as HTMLElement;
@@ -39,7 +33,7 @@ export class Card implements ICard {
 
   set cardCategory(value: string) {
     this.setText(this._cardCategory, value);
-    this._cardCategory.className = `card__category card__category_${this._colors[value]}`
+    this._cardCategory.className = `card__category ${categoryClasses[value] || ''}`; 
   }
 
   protected setPrice(value: number | null): string {

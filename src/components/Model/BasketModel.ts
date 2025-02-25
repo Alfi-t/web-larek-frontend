@@ -1,23 +1,26 @@
 import { IProductItem } from "../../types";
-
+import { EventEmitter } from "..//base/events";
 export interface IBasketModel {
   basketProducts: IProductItem[];
   getCounter: () => number;
   getSumAllProducts: () => number;
-  setSelectedCard(data: IProductItem): void;
-  deleteCardToBasket(item: IProductItem): void;
+  addToBasket(data: IProductItem): void;
+  deleteProductFromBasket(item: IProductItem): void;
   clearBasketProducts(): void;
 }
 
 export class BasketModel implements IBasketModel {
   protected _basketProducts: IProductItem[]; // список карточек товара в корзине
+  private _eventEmitter: EventEmitter;
 
-  constructor() {
+  constructor(eventEmitter: EventEmitter) {
     this._basketProducts = [];
+    this._eventEmitter = eventEmitter;
   }
 
   set basketProducts(data: IProductItem[]) {
     this._basketProducts = data;
+    this._eventEmitter.emit("basket:change", this._basketProducts);
   }
 
   get basketProducts() {
@@ -34,24 +37,27 @@ export class BasketModel implements IBasketModel {
     return this.basketProducts.reduce((sum, item) => sum + (item.price || 0), 0);
   }
 
-  // добавить карточку товара в корзину
-  setSelectedCard(data: IProductItem) {
-    if (!data) {
-      console.error("Попытка добавить некорректный товар в корзину:", data);
-      return;
-    }
-    this._basketProducts.push(data);
+  // добавить товар в корзину
+addToBasket(data: IProductItem) {
+  if (!data) {
+    console.error("Попытка добавить некорректный товар в корзину:", data);
+    return;
   }
+  this._basketProducts.push(data);
+  this._eventEmitter.emit("basket:change", this._basketProducts);
+}
 
   // удалить карточку товара из корзины
-  deleteCardToBasket(item: IProductItem) {
+  deleteProductFromBasket(item: IProductItem) {
     const index = this._basketProducts.indexOf(item);
     if (index >= 0) {
       this._basketProducts.splice(index, 1);
+      this._eventEmitter.emit("basket:change", this._basketProducts);
     }
   }
 
   clearBasketProducts() {
     this.basketProducts = [];
+    this._eventEmitter.emit("basket:change", this._basketProducts);
   }
 }

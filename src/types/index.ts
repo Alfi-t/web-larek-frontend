@@ -19,18 +19,9 @@ export interface IOrderForm {
   email?: string;
 }
 
-export interface IOrder extends IOrderForm {
+export interface IOrderLot extends IOrderForm {
   items: string[];
   total: number;
-}
-
-export interface IOrderLot{
-  payment: string;
-  email: string;
-  phone: string;
-  address: string;
-  total: number;
-  items: string[];
 }
 
 export interface IOrderResult {

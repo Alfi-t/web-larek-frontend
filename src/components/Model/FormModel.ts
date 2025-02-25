@@ -1,6 +1,6 @@
 import { IEvents } from '../base/events';
 import { FormErrors } from '../../types/index';
-
+import { ADDRESS_REGEXP, EMAIL_REGEXP, PHONE_REGEXP, ERROR_MESSAGES } from '../../utils/constants';
 export interface IFormModel {
   payment: string;
   email: string;
@@ -71,15 +71,14 @@ export class FormModel implements IFormModel {
   }
 
   validateOrder() {
-    const regexp = /^[а-яА-ЯёЁa-zA-Z0-9\s\/.,-]{7,}$/;
     const errors: typeof this.formErrors = {};
 
     if (!this.address) {
-      errors.address = 'Необходимо указать адрес';
-    } else if (!regexp.test(this.address)) {
-      errors.address = 'Укажите настоящий адрес';
+      errors.address = ERROR_MESSAGES.address.required;
+    } else if (!ADDRESS_REGEXP.test(this.address)) {
+      errors.address = ERROR_MESSAGES.address.invalid;
     } else if (!this.payment) {
-      errors.payment = 'Выберите способ оплаты';
+      errors.payment = ERROR_MESSAGES.payment.required;
     }
 
     this.formErrors = errors;
@@ -88,14 +87,12 @@ export class FormModel implements IFormModel {
   }
 
   validateContacts() {
-    const regexpEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    const regexpPhone = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{10}$/;
     const errors: typeof this.formErrors = {};
 
     if (!this.email) {
-      errors.email = 'Необходимо указать email';
-    } else if (!regexpEmail.test(this.email)) {
-      errors.email = 'Некорректный адрес электронной почты';
+      errors.email = ERROR_MESSAGES.email.required;
+    } else if (!EMAIL_REGEXP.test(this.email)) {
+      errors.email = ERROR_MESSAGES.email.invalid;
     }
 
     if (this.phone.startsWith('8')) {
@@ -103,9 +100,9 @@ export class FormModel implements IFormModel {
     }
 
     if (!this.phone) {
-      errors.phone = 'Необходимо указать телефон';
-    } else if (!regexpPhone.test(this.phone)) {
-      errors.phone = 'Некорректный формат номера телефона';
+      errors.phone = ERROR_MESSAGES.phone.required;
+    } else if (!PHONE_REGEXP.test(this.phone)) {
+      errors.phone = ERROR_MESSAGES.phone.invalid;
     }
 
     this.formErrors = errors;
@@ -122,5 +119,15 @@ export class FormModel implements IFormModel {
       total: this.total,
       items: this.items,
     };
+  }
+
+  clearForm() {
+    this.payment = '';
+    this.email = '';
+    this.phone = '';
+    this.address = '';
+    this.total = 0;
+    this.items = [];
+    this.formErrors = {};
   }
 }

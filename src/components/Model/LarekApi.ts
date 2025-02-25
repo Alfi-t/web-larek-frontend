@@ -4,7 +4,7 @@ import { IOrderLot, IOrderResult, IProductItem } from '../../types';
 export interface ILarekApi {
   cdn: string;
   items: IProductItem[];
-  getListProductCard: () => Promise<IProductItem[]>;
+  getListProducts: () => Promise<IProductItem[]>;
   postOrderLot: (order: IOrderLot) => Promise<IOrderResult>;
 }
 
@@ -19,7 +19,7 @@ export class LarekApi extends Api implements ILarekApi {
   }
 
   // получаем массив объектов(карточек) с сервера
-  getListProductCard(): Promise<IProductItem[]> {
+  getListProducts(): Promise<IProductItem[]> {
     return this.get('/product').then((data: ApiListResponse<IProductItem>) =>
       data.items.map((item) => ({
         ...item,

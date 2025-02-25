@@ -2,27 +2,27 @@ import { IProductItem } from "../../types";
 import { IEvents } from "../base/events";
 
 export interface IDataModel {
-  productCard: IProductItem[];
+  products: IProductItem[];
   selectedCard: IProductItem | null;
   setPreview(item: IProductItem): void;
 }
 
 export class DataModel implements IDataModel {
-  protected _productCard: IProductItem[];
+  protected _products: IProductItem[];
   protected _selectedCard: IProductItem | null;
 
   constructor(protected events: IEvents) {
-    this._productCard = [];
+    this._products = [];
     this._selectedCard = null;
   }
 
-  set productCard(data: IProductItem[]) {
-    this._productCard = data;
-    this.events.emit('productCard:receive');
+  set products(data: IProductItem[]) {
+    this._products = data;
+    this.events.emit('products:receive');
   }
 
-  get productCard() {
-    return this._productCard;
+  get products() {
+    return this._products;
   }
 
   setPreview(item: IProductItem) {
