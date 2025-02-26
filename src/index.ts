@@ -15,19 +15,7 @@ import { FormModel } from './components/Model/FormModel';
 import { Order } from './components/View/FormOrder';
 import { Contacts } from './components/View/FormContacts';
 import { Success } from './components/View/Success';
-
-class Page {
-  private _catalog: HTMLElement;
-
-  constructor(container: HTMLElement) {
-    
-    this._catalog = ensureElement('.gallery', container);
-  }
-
-  set catalog(items: HTMLElement[]) {
-    this._catalog.replaceChildren(...items);
-  }
-}
+import { PageView } from './components/View/Page';
 
 const cardCatalogTemplate = ensureElement('#card-catalog') as HTMLTemplateElement;
 const cardPreviewTemplate = ensureElement('#card-preview') as HTMLTemplateElement;
@@ -46,7 +34,7 @@ const basketModel = new BasketModel(events);
 const formModel = new FormModel(events);
 const order = new Order(orderTemplate, events);
 const contacts = new Contacts(contactsTemplate, events);
-const page = new Page(ensureElement('.page'));
+const page = new PageView(ensureElement('.page'), events);
 
 // Отображение карточек товара на странице
 events.on('products:receive', () => {
@@ -75,7 +63,7 @@ events.on('modalCard:open', (item: IProductItem) => {
 // Добавление товара в корзину
 events.on('card:addBasket', () => {
   basketModel.addToBasket(dataModel.selectedCard); // добавить карточку товара в корзину
-  basket.renderHeaderBasketCounter(basketModel.getCounter()); // отобразить количество товара на иконке корзины
+  page.counter = basketModel.getCounter();
   modal.close();
 });
 
@@ -105,7 +93,7 @@ events.on('basket:basketItemRemove', (item: IProductItem) => {
 
   const totalSum = basketModel.getSumAllProducts();
   modal.content = basket.render(basketItems, totalSum); // Передача обновленных данных
-  basket.renderHeaderBasketCounter(basketModel.getCounter()); // Обновить количество товаров
+  page.counter = basketModel.getCounter();
   modal.render();
 });
 
@@ -152,11 +140,11 @@ events.on('formErrors:change', (errors: Partial<IOrderForm>) => {
 /********** Открытие модального окна "Заказ оформлен" **********/
 events.on('success:open', () => {
     larekApiInstance.postOrderLot(formModel.getOrderLot())
-    .then((data) => {
+    .then(() => {
       const success = new Success(successTemplate, events);
       modal.content = success.render(basketModel.getSumAllProducts());
       basketModel.clearBasketProducts(); // очищаем корзину
-      basket.renderHeaderBasketCounter(basketModel.getCounter()); // отобразить количество товара на иконке корзины
+      page.counter = basketModel.getCounter();
       formModel.clearForm(); // Очищаем форму
       modal.render();
     })
@@ -165,20 +153,18 @@ events.on('success:open', () => {
 
 events.on('success:close', () => modal.close());
 
-/********** Блокируем прокрутку страницы при открытие модального окна **********/
+/********** Блокировка и разблокировка прокрутки страницы **********/
 events.on('modal:open', () => {
-  modal.locked = true;
+  page.locked = true;
 });
 
-/********** Разблокируем прокрутку страницы при закрытие модального окна **********/
 events.on('modal:close', () => {
-  modal.locked = false;
+  page.locked = false;
 });
 
 /********** Получаем данные с сервера **********/
-  larekApiInstance.getListProducts()
-  .then(function (data: IProductItem[]) {
-    dataModel.products = data;
-  })
-  // .then(dataModel.setProducts.bind(dataModel))
-  .catch(error => console.log(error))
+larekApiInstance.getListProducts()
+.then((data: IProductItem[]) => {
+  dataModel.products = data;
+})
+.catch(error => console.log(error));
