@@ -43,8 +43,19 @@ addToBasket(data: IProductItem) {
     console.error("Попытка добавить некорректный товар в корзину:", data);
     return;
   }
+
+  // Проверка, есть ли товар в корзине
+  if (this.isProductInBasket(data)) {
+    console.log("Этот товар уже в корзине");
+    return;
+  }
   this._basketProducts.push(data);
   this._eventEmitter.emit("basket:change", this._basketProducts);
+}
+
+// метод для проверки, есть ли товар в корзине
+isProductInBasket(product: IProductItem): boolean {
+  return this._basketProducts.some(item => item.id === product.id);
 }
 
   // удалить карточку товара из корзины

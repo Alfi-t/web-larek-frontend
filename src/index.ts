@@ -62,9 +62,20 @@ events.on('modalCard:open', (item: IProductItem) => {
 
 // Добавление товара в корзину
 events.on('card:addBasket', () => {
+  if (basketModel.isProductInBasket(dataModel.selectedCard)) {
+    // Если товар уже в корзине, блокируем кнопку
+    const buyButton = document.querySelector('.buy-button'); // Подставьте правильный селектор
+    if (buyButton) buyButton.setAttribute('disabled', 'true');
+    return; // Не добавляем товар в корзину
+  }
+  
   basketModel.addToBasket(dataModel.selectedCard); // добавить карточку товара в корзину
   page.counter = basketModel.getCounter();
   modal.close();
+
+  // Разблокируем кнопку, если товар был удален из корзины
+  const buyButton = document.querySelector('.buy-button');
+  if (buyButton) buyButton.removeAttribute('disabled');
 });
 
 // Открытие модального окна корзины
@@ -84,6 +95,13 @@ events.on('basket:open', () => {
 // Удаление карточки товара из корзины
 events.on('basket:basketItemRemove', (item: IProductItem) => {
   basketModel.deleteProductFromBasket(item);
+
+   // Проверяем, нужно ли блокировать кнопку или разблокировать
+   const buyButton = document.querySelector('.buy-button');
+   if (buyButton && basketModel.getCounter() === 0) {
+     buyButton.removeAttribute('disabled'); // Разблокировать, если корзина пуста
+   }
+   
   const basketItems = basketModel.basketProducts.map((item, index) => {
     const basketItem = new BasketItem(cardBasketTemplate, events, { 
       onClick: () => events.emit('basket:basketItemRemove', item) 

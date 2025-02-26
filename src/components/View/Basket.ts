@@ -1,5 +1,6 @@
 import { createElement } from "../../utils/utils";
 import { IEvents } from "../base/events";
+import { PageView } from "../../components/View/Page";
 
 export interface IBasket {
   basket: HTMLElement;
@@ -9,7 +10,6 @@ export interface IBasket {
   basketPrice: HTMLElement;
   headerBasketButton: HTMLButtonElement;
   headerBasketCounter: HTMLElement;
-  renderHeaderBasketCounter(value: number): void;
   renderSumAllProducts(sumAll: number): void;
   render(items: HTMLElement[], total: number): HTMLElement;
   update(items: HTMLElement[], total: number): void;
@@ -48,10 +48,6 @@ export class Basket implements IBasket {
       this.basketList.replaceChildren(createElement<HTMLParagraphElement>('p', { textContent: 'Корзина пуста' }));
     }
   }
-
-  renderHeaderBasketCounter(value: number) {
-    this.headerBasketCounter.textContent = String(value);
-  }
   
   renderSumAllProducts(sumAll: number) {
     this.basketPrice.textContent = String(sumAll + ' синапсов');
@@ -66,6 +62,5 @@ export class Basket implements IBasket {
 
   update(items: HTMLElement[], total: number) {
     this.render(items, total);
-    this.renderHeaderBasketCounter(items.length);
   }
 }

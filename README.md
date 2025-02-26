@@ -187,7 +187,6 @@ constructor(protected events: IEvents)
 
 **Методы:**
 
-- `renderHeaderBasketCounter(value: number)` — отображает количество товаров в шапке.
 - `renderSumAllProducts(sumAll: number)` — отображает общую стоимость товаров в корзине.
 - `render(items: HTMLElement[], total: number)` — рендерит корзину с товарами и суммой, возвращает элемент корзины.
 - `update(items: HTMLElement[], total: number)` — обновляет содержимое корзины и счётчик товаров.
@@ -246,7 +245,6 @@ constructor(protected events: IEvents)
 - `formErrors: HTMLElement` — блок для вывода ошибок в форме.
 
 **Метод:**
-
 - `set valid(value: boolean)` — геттер и сеттер для состояния кнопки отправки формы.
 
 ### Класс FormOrder
@@ -260,11 +258,7 @@ constructor(protected events: IEvents)
 - `paymentSelection: string` — приватное свойство для хранения выбранного способа оплаты.
 
 **Метод:**
-
 - `paymentSelection()` — выделяет выбранный способ оплаты.
-
-### Класс FormContacts
-Управляет отображением содержимого модального окна и позволяет принять от пользователя номер телефона и Email.
 
 #### Класс Modal
 Управляет отображением модальных окон.
