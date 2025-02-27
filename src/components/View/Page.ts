@@ -1,5 +1,5 @@
 import { Component } from '../base/Components';
-import { IEvents } from '../base/events';
+import { IEvents } from '../base/Events';
 import { ensureElement } from '../../utils/utils';
 
 interface IPage {
@@ -14,16 +14,19 @@ export class PageView extends Component<IPage> {
 	protected _wrapper: HTMLElement;
 	protected _basket: HTMLElement;
 
-	constructor(container: HTMLElement, protected events: IEvents) {
+	constructor(container: HTMLElement, protected Events: IEvents) {
 		super(container);
 
-		this._counter = ensureElement<HTMLElement>('.header__basket-counter', container);
+		this._counter = ensureElement<HTMLElement>(
+			'.header__basket-counter',
+			container
+		);
 		this._catalog = ensureElement<HTMLElement>('.gallery', container);
 		this._wrapper = ensureElement<HTMLElement>('.page__wrapper', container);
 		this._basket = ensureElement<HTMLElement>('.header__basket', container);
 
 		this._basket.addEventListener('click', () => {
-			this.events.emit('ui:basket-open');
+			this.Events.emit('ui:basket-open');
 		});
 	}
 

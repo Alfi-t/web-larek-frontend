@@ -153,7 +153,7 @@ protected constructor(protected readonly container: HTMLElement)
 
 **Конструктор:**
 
-constructor(protected events: IEvents)
+constructor(protected Events: IEvents)
 
 #### Класс FormModel
 Хранит данные, введенные пользователем в форму.
@@ -295,7 +295,7 @@ constructor(protected events: IEvents)
 
 **Конструктор:**
 
-constructor(container: HTMLElement, events: IEvents)
+constructor(container: HTMLElement, Events: IEvents)
 
 #### Класс Success
 Используется для отобажения модального окна с сообщением о том, что операция прошла успешно.

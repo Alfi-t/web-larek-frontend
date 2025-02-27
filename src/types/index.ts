@@ -1,32 +1,32 @@
 export interface IProductItem {
-  id: string;
-  description: string;
-  image: string;
-  title: string;
-  category: string;
-  price: number | null;
+	id: string;
+	description: string;
+	image: string;
+	title: string;
+	category: string;
+	price: number | null;
 }
 
 export interface IActions {
-  onClick: (event: MouseEvent) => void;
+	onClick: (event: MouseEvent) => void;
 }
 
 // интерфейс формы заказа
 export interface IOrderForm {
-  payment?: string;
-  address?: string;
-  phone?: string;
-  email?: string;
+	payment?: string;
+	address?: string;
+	phone?: string;
+	email?: string;
 }
 
 export interface IOrderLot extends IOrderForm {
-  items: string[];
-  total: number;
+	items: string[];
+	total: number;
 }
 
 export interface IOrderResult {
-  id: string;
-  total: number;
+	id: string;
+	total: number;
 }
 
 // тип ошибки формы

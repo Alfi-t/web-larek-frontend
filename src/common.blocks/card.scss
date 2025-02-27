@@ -8,7 +8,7 @@
 	background-color: $primary;
 	color: white;
 	padding: $defaultPadding;
-	  
+
 	&_full {
 		flex-direction: row;
 		background-color: transparent;
@@ -82,4 +82,3 @@
 	&__price {
 	}
 }
-  

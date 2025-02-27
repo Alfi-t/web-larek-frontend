@@ -1,55 +1,63 @@
-import { IActions, IProductItem } from "../../types";
-import { IEvents } from "../base/events";
+import { IActions, IProductItem } from '../../types';
+import { IEvents } from '../base/Events';
 import { categoryClasses } from '..//../utils/constants';
 
 export interface ICard {
-  render(data: IProductItem): HTMLElement;
+	render(data: IProductItem): HTMLElement;
 }
 
 export class Card implements ICard {
-  protected _cardElement: HTMLElement;
-  protected _cardCategory: HTMLElement;
-  protected _cardTitle: HTMLElement;
-  protected _cardImage: HTMLImageElement;
-  protected _cardPrice: HTMLElement;
-  
-  constructor(template: HTMLTemplateElement, protected events: IEvents, actions?: IActions) {
-    this._cardElement = template.content.querySelector('.card').cloneNode(true) as HTMLElement;
-    this._cardCategory = this._cardElement.querySelector('.card__category');
-    this._cardTitle = this._cardElement.querySelector('.card__title');
-    this._cardImage = this._cardElement.querySelector('.card__image');
-    this._cardPrice = this._cardElement.querySelector('.card__price');
-    
-    if (actions?.onClick) {
-      this._cardElement.addEventListener('click', actions.onClick);
-    }
-  }
+	protected _cardElement: HTMLElement;
+	protected _cardCategory: HTMLElement;
+	protected _cardTitle: HTMLElement;
+	protected _cardImage: HTMLImageElement;
+	protected _cardPrice: HTMLElement;
 
-  protected setText(element: HTMLElement, value: unknown): string {
-    if (element) {
-      return element.textContent = String(value);
-    }
-  }
+	constructor(
+		template: HTMLTemplateElement,
+		protected Events: IEvents,
+		actions?: IActions
+	) {
+		this._cardElement = template.content
+			.querySelector('.card')
+			.cloneNode(true) as HTMLElement;
+		this._cardCategory = this._cardElement.querySelector('.card__category');
+		this._cardTitle = this._cardElement.querySelector('.card__title');
+		this._cardImage = this._cardElement.querySelector('.card__image');
+		this._cardPrice = this._cardElement.querySelector('.card__price');
 
-  set cardCategory(value: string) {
-    this.setText(this._cardCategory, value);
-    this._cardCategory.className = `card__category ${categoryClasses[value] || ''}`; 
-  }
+		if (actions?.onClick) {
+			this._cardElement.addEventListener('click', actions.onClick);
+		}
+	}
 
-  protected setPrice(value: number | null): string {
-    if (value === null) {
-      return 'Бесценно'
-    }
-    return String(value) + ' синапсов'
-  }
+	protected setText(element: HTMLElement, value: unknown): string {
+		if (element) {
+			return (element.textContent = String(value));
+		}
+	}
 
-  render(data: IProductItem): HTMLElement {
-    this._cardCategory.textContent = data.category;
-    this.cardCategory = data.category;
-    this._cardTitle.textContent = data.title;
-    this._cardImage.src = data.image;
-    this._cardImage.alt = this._cardTitle.textContent;
-    this._cardPrice.textContent = this.setPrice(data.price);
-    return this._cardElement;
-  }
+	set cardCategory(value: string) {
+		this.setText(this._cardCategory, value);
+		this._cardCategory.className = `card__category ${
+			categoryClasses[value] || ''
+		}`;
+	}
+
+	protected setPrice(value: number | null): string {
+		if (value === null) {
+			return 'Бесценно';
+		}
+		return String(value) + ' синапсов';
+	}
+
+	render(data: IProductItem): HTMLElement {
+		this._cardCategory.textContent = data.category;
+		this.cardCategory = data.category;
+		this._cardTitle.textContent = data.title;
+		this._cardImage.src = data.image;
+		this._cardImage.alt = this._cardTitle.textContent;
+		this._cardPrice.textContent = this.setPrice(data.price);
+		return this._cardElement;
+	}
 }
