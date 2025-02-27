@@ -53,6 +53,7 @@ export class Order implements IOrder {
 			// Очистить форму после отправки
 			this.formOrder.reset();
 			this.isAddressSelected = false; // Сбросить выбор адреса
+			this.paymentSelection = ''; // Сбросить выбор способа оплаты
 			this.checkFormValidity(); // Проверить состояние кнопки после отправки
 		});
 	}
@@ -86,3 +87,4 @@ export class Order implements IOrder {
 		return this.formOrder;
 	}
 }
+
