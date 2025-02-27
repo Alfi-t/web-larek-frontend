@@ -14,6 +14,7 @@ export class Order implements IOrder {
   buttonSubmit: HTMLButtonElement;
   formErrors: HTMLElement;
   private _paymentSelection: string = '';
+  private isAddressSelected: boolean = false;
 
   constructor(template: HTMLTemplateElement, protected events: IEvents) {
     this.formOrder = template.content.querySelector('.form').cloneNode(true) as HTMLFormElement;
@@ -25,6 +26,7 @@ export class Order implements IOrder {
       item.addEventListener('click', () => {
         this.paymentSelection = item.name;
         events.emit('order:paymentSelection', item);
+        this.checkFormValidity(); // Проверяем состояние кнопки после выбора
       });
     });
 
@@ -33,11 +35,23 @@ export class Order implements IOrder {
       const field = target.name;
       const value = target.value;
       this.events.emit(`order:changeAddress`, { field, value });
+
+      // Если выбран адрес, снимаем блокировку с кнопки
+      if (field === 'address' && value.trim() !== '') {
+        this.isAddressSelected = true;
+      }
+
+      this.checkFormValidity(); // Проверяем состояние кнопки
     });
 
     this.formOrder.addEventListener('submit', (event: Event) => {
       event.preventDefault();
       this.events.emit('contacts:open');
+
+      // Очистить форму после отправки
+      this.formOrder.reset();
+      this.isAddressSelected = false; // Сбросить выбор адреса
+      this.checkFormValidity(); // Проверить состояние кнопки после отправки
     });
   }
 
@@ -52,6 +66,12 @@ export class Order implements IOrder {
       this.buttonAll.forEach(item => {
         item.classList.toggle('button_alt-active', item.name === payment);
       });
+  }
+
+  // Проверка состояния кнопки
+  private checkFormValidity() {
+    // Разрешить кнопку, если выбран адрес и выбран способ оплаты
+    this.buttonSubmit.disabled = !(this.isAddressSelected && this.paymentSelection);
   }
 
   set valid(value: boolean) {

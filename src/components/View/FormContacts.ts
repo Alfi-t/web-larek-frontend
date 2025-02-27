@@ -26,17 +26,51 @@ export class Contacts implements IContacts {
         const field = target.name;
         const value = target.value;
         this.events.emit(`contacts:changeInput`, { field, value });
-      })
-    })
+        this.validateForm();
+      });
+    });
 
     this.formContacts.addEventListener('submit', (event: Event) => {
       event.preventDefault();
-      this.events.emit('success:open');
+      if (this.isValid()) {
+        this.events.emit('success:open');
+        this.events.emit('form:clear'); 
+      } else {
+        this.displayErrors();  // Отображаем ошибки, если форма не валидна
+      }
     });
+
+    // Подписка на событие очистки формы
+    this.events.on('form:clear', () => this.clearForm());
+  }
+
+  // Валидация всех полей формы
+  validateForm() {
+    let isValid = true;
+    this.inputAll.forEach(input => {
+      if (!input.checkValidity()) {
+        isValid = false;
+      }
+    });
+    this.valid = isValid;  // Обновляем кнопку отправки
+  }
+
+  // Проверка, валидна ли форма
+  isValid(): boolean {
+    return this.inputAll.every(input => input.checkValidity());
+  }
+
+  // Метод для отображения ошибок
+  displayErrors() {
+    this.formErrors.innerHTML = 'Пожалуйста, заполните все обязательные поля корректно';
   }
 
   set valid(value: boolean) {
     this.buttonSubmit.disabled = !value;
+  }
+  // Метод для очистки формы
+  clearForm() {
+    this.inputAll.forEach(i => i.value = "");
   }
 
   render() {
